@@ -45,6 +45,12 @@ clean-json:
 
 clean: clean-working clean-packages clean-json
 
+packages: $(RCPDIR)/*
+
+packages/archive-contents: packages/*.entry
+	@echo " • Building $@ ..."
+	$(EVAL) '(package-build-dump-archive-contents "packages/archive-contents")'
+
 
 ## Json rules
 html/archive.json: packages/archive-contents
@@ -66,7 +72,7 @@ $(RCPDIR)/.dirstamp: .FORCE
 $(RCPDIR)/%: .FORCE
 	@echo " • Building recipe $(@F) ..."
 
-	$(EVAL) "(package-build-archive '$(@F))"
+	- $(EVAL) "(package-build-archive '$(@F))"
 
 	@echo " ✓ Wrote $$(ls -lsh $(PKGDIR)/$(@F)-*) "
 	@echo
